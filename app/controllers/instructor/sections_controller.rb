@@ -4,7 +4,6 @@ class Instructor::SectionsController < ApplicationController
  before_action :require_authorized_for_current_section, only: [:new, :create]
 
  
- 
   def new
     @section = Section.new
  end
@@ -15,11 +14,16 @@ class Instructor::SectionsController < ApplicationController
   end
   
   def update
-     current_section.update_attributes(section_params)
+    current_section.update_attributes(section_params)
+    render plain: 'updated!'
   end
   
   
   private
+   helper_method :current_section
+    def current_section
+        @current_section ||= Section.find(params[:id])
+    end
   
   def require_authorized_for_current_course
     if current_course.user != current_user
